@@ -1,10 +1,10 @@
 FROM alpine:3.19
 
-COPY fpm.ini .
-COPY www.conf.ini .
-COPY php.ini .
-COPY install.sh /tmp/
-COPY entrypoint.sh /tmp/
+COPY conf/fpm.ini .
+COPY conf/www.conf.ini .
+COPY conf/php.ini .
+COPY tools/install.sh /tmp/
+COPY tools/entrypoint.sh /tmp/
 
 RUN sh /tmp/install.sh
 
