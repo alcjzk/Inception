@@ -40,6 +40,7 @@ services:
   mariadb:
     build: requirements/mariadb/
     image: mariadb
+    restart: always
     networks: [ "inception" ]
     pull_policy: never
     container_name: mariadb

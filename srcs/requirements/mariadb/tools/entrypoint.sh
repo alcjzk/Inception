@@ -1,13 +1,16 @@
 #!/bin/sh
 
-apk update
-apk upgrade
-apk add mysql mysql-client
-
-mv mariadb-server.cnf /etc/my.cnf.d/
-mariadb-install-db --skip-test-db
+ls run
+rm -rf /run/mysqld/
+ls run
 mkdir /run/mysqld/
 chown mysql:mysql /run/mysqld
+
+if [ ! -d "/var/mysql/mysql" ]; then
+
+mariadb-install-db --skip-test-db
+
+fi
 
 if [ ! -d "/var/mysql/${DB_WP_DATABASE}" ]; then
 
