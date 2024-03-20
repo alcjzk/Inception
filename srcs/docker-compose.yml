@@ -55,7 +55,17 @@ secrets:
 
 volumes:
   www:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${WWW_PATH}
   mysql:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MYSQL_PATH}
 
 networks:
   inception:
