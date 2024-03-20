@@ -1,0 +1,71 @@
+version: "3"
+
+services:
+  nginx:
+    image: nginx
+    build:
+      context: requirements/nginx/
+      args:
+        - DOMAIN=${DOMAIN}
+    secrets:
+      - certificate.crt
+      - certificate.key
+    ports:
+      - "443:443"
+    restart: always
+    networks:
+      - inception
+    pull_policy: never
+    container_name: nginx
+    volumes:
+      - www:/srv
+    depends_on: 
+      - wordpress
+    env_file: .env
+  wordpress:
+    build: requirements/wordpress/
+    image: wordpress
+    restart: always
+    networks:
+      - inception
+    pull_policy: never
+    container_name: wordpress
+    volumes:
+      - www:/srv
+    depends_on: 
+      mariadb:
+        condition: service_healthy
+    env_file: .env
+  mariadb:
+    build: requirements/mariadb/
+    image: mariadb
+    restart: always
+    networks: [ "inception" ]
+    pull_policy: never
+    container_name: mariadb
+    env_file: .env
+    volumes:
+      - mysql:/var/mysql
+
+secrets:
+  certificate.crt:
+    file: ${CERT_PATH}
+  certificate.key:
+    file: ${CERT_KEY_PATH}
+
+volumes:
+  www:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${WWW_PATH}
+  mysql:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MYSQL_PATH}
+
+networks:
+  inception:
